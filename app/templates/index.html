@@ -1,0 +1,26 @@
+<!--Kế thừa lại base.html-->
+{% extends 'layout/base.html' %}
+<!--Viết lại tên block mà mình muốn kế thừa-->
+{%block content %}
+{% if products%}
+<div class="row">
+    {% for p in products %}
+    <div class="col-md-3" style="padding:1rem">
+        <div class="card" style="width:300px">
+            <img class="card-img-top" src="{{p.image}}" alt="{{p.description}}">
+            <div class="card-body">
+                <h4 class="card-title">{{p.name}}</h4>
+                <p class="card-text">{{p.price}} VNĐ</p>
+                <a href="" class="btn btn-primary">Đặt hàng</a>
+                <a href="/product/{{p.id}}" class="btn btn-danger">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!--            Kiểm tra sản phẩm null hoặc rổng-->
+{% else %}
+<p class="text danger" style="color : red">Không tìm thấy sản phẩm</p>
+{%endif%}
+<!--            Xử lý gì đó-->
+{%endblock%}

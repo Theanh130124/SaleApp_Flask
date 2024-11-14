@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Quản lý bán hàng</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <!--            me-auto day qua phai-->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Trang chủ</a>
+                </li>
+                <!--                Truyền vào đây để lấu danh mục sản phẩm phải qua bên index.py thêm request -->
+
+                {% for cate in categories %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/?category_id={{cate.id}}">{{cate.name}}</a>
+                </li>
+                {% endfor %}
+
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sản phẩm
+                        khác</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Tai nghe</a></li>
+                        <li><a class="dropdown-item" href="#">Loa</a></li>
+                        <li><a class="dropdown-item" href="#">TV</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-success " href="/register">Đăng ký</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/login">Đăng nhập</a>
+                </li>
+
+            </ul>
+            <!--            Thêm action gửi lên chính trang chủ và name -->
+            <form class="d-flex" action="/">
+                <input class="form-control me-2" name="keyword" type="text" placeholder="Nhập từ khóa">
+                <button class="btn btn-primary" type="button">Search</button>
+            </form>
+
+
+        </div>
+    </div>
+</nav>

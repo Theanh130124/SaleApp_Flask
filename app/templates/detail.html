@@ -1,0 +1,17 @@
+{% extends 'layout/base.html' %}
+<!--Viết lại tên block mà mình muốn kế thừa-->
+{%block content %}
+
+<h1 class="text-center text-danger">CHI TIET SAN PHAM </h1>
+<div class="row">
+  <div class="col-md-4 col-sm-12 " >
+  <!--  THÊM class img-fluid để ảnh được căn chỉnh vừa cái md-4 -->
+  <img src="{{product.image}}" class="img-fluid"  alt="{{product.name}}">
+    </div>
+  <div class="col-md-8 col-sm-12">
+    <h2> {{product.name}}</h2>
+    <p> {{product.description}}</p>
+    <h3>{{ "{:,.1f}".format(product.price) }} VNĐ</h3>
+  </div>
+</div>
+{%endblock%}

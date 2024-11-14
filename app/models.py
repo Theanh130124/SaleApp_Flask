@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, Float, Boolean, ForeignKey , Enum
-from sqlalchemy.testing.suite.test_reflection import users
+
 
 from app import db, app
 # Phải them dong nay để cấu hình mối quan hệ Association
@@ -57,9 +57,9 @@ class User(BaseModel ,UserMixin):
     name = Column(String(50) , nullable=False)
     username = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
-    active = Column(Boolean, nullable=False)
+    active = Column(Boolean)   #Nữa cacsi nullable = True hoặc không ghi để bên def register không cần truyền vào
     avatar = Column(String(100),nullable=False )
-    user_role = Column(Enum(UserRole) , default=UserRole.USER)
+    user_role = Column(Enum(UserRole) , default=UserRole.USER) #mặc định là user -> đề tài nữa tạo phải gán giáo viên hoặc nhân viên .
     def __str__(self):
         return self.name
 
@@ -73,24 +73,25 @@ if __name__ == "__main__":
         # db.session.add_all([cate1, cate2, cate3])
 
         # Cái cate PC mình thêm dưới CSDL
-
-        p1 = Product(name='IPHONE 13 PROMAX' , description='RAM 156GB' , price='13000000' , image ='https://24hstore.vn/images/products/2024/09/10/large/iphone-16-1.jpg', category_id=1)
-        p2 = Product(name='IPHONE 12 PROMAX', description='RAM 256GB', price='12000000',image='https://24hstore.vn/images/products/2024/08/22/large/iphone-15-pro-hinh-1.jpg', category_id=1)
-        p3 = Product(name='IPHONE 11 PROMAX', description='RAM 64GB', price='10000000',image='https://24hstore.vn/images/products/2024/09/10/large/iphone-16-pro-01.jpg',category_id=1)
-        p4 = Product(name='IPHONE 15 PROMAX', description='RAM 1TB', price='20000000',image='https://24hstore.vn/images/products/2023/09/27/large/iphone%2015%20Plus%20black_1695790477_1.jpg', category_id=1)
-        p5 = Product(name='IPAD 15 PROMAX', description='RAM 1TB', price='25000000',image='https://24hstore.vn/images/products/2024/10/18/large/ipad-mini-7-wifi-cellular-512gb-tim.jpg',category_id=2)
-
-        # # # Dùng để truy vấn (cập nhật dữ liệu xuống CSDL) -> Cập nhật sản phẩm vào bảng
-        db.session.add_all([p1,p2,p3,p4,p5])
-        db.session.commit()
+        #
+        # p1 = Product(name='IPHONE 13 PROMAX' , description='RAM 156GB' , price='13000000' , image ='https://24hstore.vn/images/products/2024/09/10/large/iphone-16-1.jpg', category_id=1)
+        # p2 = Product(name='IPHONE 12 PROMAX', description='RAM 256GB', price='12000000',image='https://24hstore.vn/images/products/2024/08/22/large/iphone-15-pro-hinh-1.jpg', category_id=1)
+        # p3 = Product(name='IPHONE 11 PROMAX', description='RAM 64GB', price='10000000',image='https://24hstore.vn/images/products/2024/09/10/large/iphone-16-pro-01.jpg',category_id=1)
+        # p4 = Product(name='IPHONE 15 PROMAX', description='RAM 1TB', price='20000000',image='https://24hstore.vn/images/products/2023/09/27/large/iphone%2015%20Plus%20black_1695790477_1.jpg', category_id=1)
+        # p5 = Product(name='IPAD 15 PROMAX', description='RAM 1TB', price='25000000',image='https://24hstore.vn/images/products/2024/10/18/large/ipad-mini-7-wifi-cellular-512gb-tim.jpg',category_id=2)
+        #
+        # # # # Dùng để truy vấn (cập nhật dữ liệu xuống CSDL) -> Cập nhật sản phẩm vào bảng
+        # db.session.add_all([p1,p2,p3,p4,p5])
+        # db.session.commit()
 
 
 
        # Bâm mật khẩu ra
-       # import hashlib
-       # password = str(hashlib.md5('123456'.encode('utf-8')).digest()) #.hexdigest() thay vì dùng digest()
-       # u = User(name='theanh',username='admin', password=password , active=True, user_role=UserRole.ADMIN, avatar='')
-       # db.session.add(u)
+       import hashlib
+       password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest()) #.hexdigest() thay vì dùng digest()
+       u = User(name='theanh',username='admin', password=password , active=True, user_role=UserRole.ADMIN, avatar='')
+       db.session.add(u)
+       db.session.commit()
 
 
         # Dùng để tạo bảng trong CSDL -> hoặc tạo 1 cột cho bảng

@@ -28,12 +28,30 @@
                         <li><a class="dropdown-item" href="#">TV</a></li>
                     </ul>
                 </li>
+                <!--                đã đăng nhập roi -->
+                {% if current_user.is_authenticated %}
+                <!--                Có thể viết thêm trang xem thông tin cá nhân -->
+                <li class="nav-item">
+                    <a class="nav-link text-success" href="#">
+                        <img src="{{current_user.avatar}}" width="40" class="rounded-circle" alt="AnhDaiDien">
+                    </a>
+                </li>
+                 <li class="nav-item">
+                   <a class="nav-link text-success" href="#"><p>CHÀO <span class="text-danger">{{ current_user.name }}</span>!!!</p></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/logout">Đăng xuất</a>
+                </li>
+                <!--Chưa đăng nhâp -->
+                {%else%}
                 <li class="nav-item">
                     <a class="nav-link text-success " href="/register">Đăng ký</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="/login">Đăng nhập</a>
                 </li>
+                {%endif%}
+
 
             </ul>
             <!--            Thêm action gửi lên chính trang chủ và name -->

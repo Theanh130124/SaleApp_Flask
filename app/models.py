@@ -1,13 +1,15 @@
-from sqlalchemy import Column, Integer, String, Text, Float, Boolean, ForeignKey , Enum
+from token import COLON
+
+from sqlalchemy import Column, Integer, String, Text, Float, Boolean, ForeignKey , Enum,  DateTime
 
 
 from app import db, app
 # Phải them dong nay để cấu hình mối quan hệ Association
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from enum import Enum as UserEnum
 #pip install flask-login
 from flask_login import UserMixin
-
+from datetime import datetime
 
 # Clas BaseModel được tạo ra để gom nhóm những thuộc tính chung lại
 
@@ -35,6 +37,7 @@ class Category(BaseModel):
 
 
 class Product(BaseModel):
+    # __tablename__ ='product'
     name = Column(String(50), nullable=False)
     description = Column(Text)  # Khi dùng Text thì nho import và sqlalchemy
     price = Column(Float, default=0)  # Float cũng vay
@@ -42,6 +45,9 @@ class Product(BaseModel):
     active = Column(Boolean, default=True)
     # Cấu hình khóa ngoại tạo ra sản phẩm phải có danh mục nullable = False
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    receipt_details = relationship('ReceiptDetails', backref='product', lazy=True)
+    #Lấy tag ra không lấy sản phẩm ra
+    tags =relationship('Tag',secondary='pro_tag',lazy='subquery',backref=backref('products ', lazy=True))
     def __str__(self):
         return self.name
 
@@ -60,10 +66,28 @@ class User(BaseModel ,UserMixin):
     active = Column(Boolean)   #Nữa cacsi nullable = True hoặc không ghi để bên def register không cần truyền vào
     avatar = Column(String(100),nullable=False )
     user_role = Column(Enum(UserRole) , default=UserRole.USER) #mặc định là user -> đề tài nữa tạo phải gán giáo viên hoặc nhân viên .
+    receipts = relationship('Receipt', backref='user', lazy=True)
     def __str__(self):
         return self.name
+class Receipt(BaseModel):
+    create_date = Column(DateTime, default=datetime.now())
+    user_id = Column(Integer , ForeignKey(User.id) , nullable=False)
+    details = relationship('ReceiptDetails' , backref='receipt', lazy=True)
+class ReceiptDetails(BaseModel):
+    quantity = Column(Integer , default=0)
+    price = Column(Float , default=0)
+    product_id = Column(Integer, ForeignKey(Product.id), nullable=False )
+    receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
 
-
+class Tag(BaseModel):
+    name = Column(String(50), nullable=False,unique=True)
+    def __str__(self):
+        self.name
+#2N2
+#Nếu hàm này viết sau thì foreignKey khong cần ('product.id') -> product là tên bản còn nếu viết sau thì viết như bên dưới tên class.id
+prod_tag = db.Table('pro_tag',
+                    Column('product_id' ,Integer ,ForeignKey(Product.id),primary_key=True),
+                    Column('tag_id',Integer,ForeignKey(Tag.id),primary_key=True))
 if __name__ == "__main__":
     with app.app_context():
         # # Gio them cac doi tượng vào bảng
@@ -87,13 +111,13 @@ if __name__ == "__main__":
 
 
        # Bâm mật khẩu ra
-       import hashlib
-       password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest()) #.hexdigest() thay vì dùng digest()
-       u = User(name='theanh',username='admin', password=password , active=True, user_role=UserRole.ADMIN, avatar='')
-       db.session.add(u)
-       db.session.commit()
+       # import hashlib
+       # password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest()) #.hexdigest() thay vì dùng digest()
+       # u = User(name='theanh',username='admin', password=password , active=True, user_role=UserRole.ADMIN, avatar='')
+       # db.session.add(u)
+       # db.session.commit()
 
 
         # Dùng để tạo bảng trong CSDL -> hoặc tạo 1 cột cho bảng
         # Và nếu có thể các cột trong CSDL thì chạy lại nó đóng mấy cái kia lại
-        # db.create_all()
+        db.create_all()

@@ -1,0 +1,42 @@
+{%extends 'layout/base.html'%}
+{%block content %}
+
+{% if 'cart' in session and session['cart'] %}
+<h1 class="text-center text-success">Chào mứng đến với giỏ hàng</h1>
+<table class="table">
+    <tr >
+        <th>Mã sản phẩm</th>
+        <th>Tên sản phẩm</th>
+        <th>Đơn giá</th>
+        <th>Số lượng trong giỏ</th>
+        <th></th>
+    </tr>
+    {% for c in session['cart'].values() %}
+    <tr id="cart{{c.id}}">
+        <td>{{c.id}}</td>
+        <td>{{c.name}}</td>
+        <td>{{c.price}} VNĐ</td>
+        <td>
+<!--            Sự kiên onblur khi rời  chuột  khỏi sẽ xảy ra sự kiện -->
+            <input type="number" onblur="updateCart({{c.id}}, this)" value="{{c.quantity}}" class="form-control"/></td>
+        <td> <input type="button" onclick="deleteCart({{c.id}})" value="Xóa" class="btn btn-danger"/></td>
+
+    </tr>
+    {%endfor%}
+</table>
+<div class="alert alert-info" >
+    <h3>Tổng sản phẩm  <span class="cart-counter">{{ cart.total_quantity}}</span> </h3>
+    <h3>Tổng tiền <span class="cart-amount">{{ "{:,.0f}".format(cart.total_amount)}}</span> VNĐ</h3>
+</div>
+<div>
+    {%if current_user.is_authenticated%}
+     <input type="button" onclick="pay()" value="Thanh toán đơn hàng" class="btn btn-success"/>
+    {%else%}
+<!--    Truyền next khi đang ở trang nào đăng nhập rồi lại vào lại  trong đúng trang mình truyền next vào và qua bên login_my_user sửa redirect-->
+    <p>Vui lòng <a href="/login?next=/cart">đăng nhập</a> để thanh toán</p>
+    {%endif%}
+</div>
+{%else%}
+<h1>Không có sản phẩm trong giỏ</h1>
+{%endif%}
+{%endblock%}

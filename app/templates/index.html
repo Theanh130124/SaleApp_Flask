@@ -11,16 +11,26 @@
             <div class="card-body">
                 <h4 class="card-title">{{p.name}}</h4>
                 <p class="card-text">{{p.price}} VNĐ</p>
-                <a href="" class="btn btn-primary">Đặt hàng</a>
-                <a href="/product/{{p.id}}" class="btn btn-danger">Xem chi tiết</a>
+                <!--                Nho truyen '  ' -> la bien ,   chu khong dung "  "-->
+                <a href="javascript:;" onclick="addToCart({{p.id}}, '{{p.name}}',{{p.price}})" class="btn btn-primary">Đặt hàng</a>
+
+                <a href="/product/{{p.id}}"  class="btn btn-danger">Xem chi tiết</a>
             </div>
         </div>
     </div>
     {% endfor %}
+<!--    Phan trang-->
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
 </div>
 <!--            Kiểm tra sản phẩm null hoặc rổng-->
 {% else %}
-<p class="text danger" style="color : red">Không tìm thấy sản phẩm</p>
+<p class="text danger text-center" style="color : red">Không tìm thấy sản phẩm</p>
 {%endif%}
-<!--            Xử lý gì đó-->
+<!-- Xử lý gì đó-->
 {%endblock%}

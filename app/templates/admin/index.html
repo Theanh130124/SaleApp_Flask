@@ -2,8 +2,8 @@
 
 {% block body %}
 
-{% if current_user.is_authenticated %}
-<h1 class="text-center">TRANG CHỦ QUẢN TRỊ BÁN HÀNG</h1>
+{% if current_user.is_authenticated%}
+<h1 class="text-center text-success">TRANG CHỦ QUẢN TRỊ BÁN HÀNG</h1>
 <h3>CHÀO <span class="text-danger">{{ current_user.name }}</span>!!!</h3>
 {% else %}
 <form method="post" action="/login-admin">

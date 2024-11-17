@@ -10,8 +10,12 @@
     </div>
   <div class="col-md-8 col-sm-12">
     <h2> {{product.name}}</h2>
-    <p> {{product.description}}</p>
+    <p> {{product.description|safe}}</p>
     <h3>{{ "{:,.1f}".format(product.price) }} VNĐ</h3>
+    {%for t in product.tags %}
+    <span class="badge bg-success">{{t.name}}</span>
+    {%endfor%}
+
   </div>
 </div>
 {%endblock%}

@@ -1,4 +1,29 @@
-application/cache
-app/__pycache__/
-requirements.txt
-venv/
+        application/cache
+        app/__pycache__/
+        requirements.txt
+        venv/
+        modified:   .idea/workspace.xml
+        modified:   app/__init__.py
+        modified:   app/admin.py
+        modified:   app/dao.py
+        modified:   app/decorators.py
+        modified:   app/index.py
+        modified:   app/models.py
+        modified:   app/static/css/style.css
+        modified:   app/static/js/cart.js
+        modified:   app/templates/admin/index.html
+        modified:   app/templates/cart.html
+        modified:   app/templates/detail.html
+        modified:   app/templates/index.html
+        modified:   app/templates/layout/base.html
+        modified:   app/templates/layout/header.html
+        modified:   app/templates/login.html
+        modified:   app/templates/register.html
+        modified:   app/utils.py
+        venv/
+        app/__pycache__/
+        app/__pycache__/
+        
+        venv/
+        venv/
+

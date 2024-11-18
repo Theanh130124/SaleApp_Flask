@@ -4,12 +4,13 @@ import babel.localedata
 # Thêm pip install flask_babelex -> để có thể sửa các thanh tiêu đề của admin -> như các thành filer -> được cộng điểm
 
 from app.models import Category, Product ,Tag
-from app import db, app
+from app import db, app ,dao
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from wtforms import TextAreaField
 from wtforms.widgets import TextArea
+from flask import request
 # from flask_babel import Babel
 
 
@@ -75,14 +76,23 @@ class CategoryView(ModelView):
 # Thống kê báo cáo
 class StatsView(BaseView):
     @expose('/')
-    def __index__(self):
-        return self.render('admin/stats.html')
+    def index(self):
+        stats = dao.stats_revenue(kw=request.args.get('kw'),
+                                  from_date=request.args.get('from_date'),
+                                  to_date=request.args.get('to_date'))
+        return self.render('admin/stats.html', stats=stats)
 
     def is_accessible(self):
         return current_user.is_authenticated
+#Khi đã import AdminIndexView thì ta viết lớp này để có thể đổ dữ liệu ra dùng
+class MyAdminView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        stats = dao.count_product_by_cate()
 
+        return  self.render('admin/index.html', stats=stats)
 
-admin = Admin(app=app, name='Quản trị bán hàng', template_mode='bootstrap4')
+admin = Admin(app=app, name='Quản trị bán hàng', template_mode='bootstrap4',index_view=MyAdminView())
 # Thêm các models muốn quản trị
 admin.add_view(CategoryView(Category, db.session, name='Danh mục'))
 admin.add_view(ProductView(Product, db.session, name='Sản phẩm'))

@@ -2,7 +2,8 @@ from app import db
 from app.models import Category, Product, User, Receipt, ReceiptDetails
 import hashlib
 from flask_login import  current_user
-
+# Import khi thông kê báo cáo
+from sqlalchemy import  func
 
 def load_categories():
 
@@ -52,7 +53,33 @@ def save_receipt(cart):
         db.session.add(d)
      db.session.commit()
 
+#Thong ke bao cáo
+def count_product_by_cate():
+    # isouter =True sẽ in ra tất cả các category -> dù có sản phẩm có hay không
+    return db.session.query(Category.id , Category.name,func.count(Product.id))\
+        .join(Product, Product.category_id.__eq__(Category.id) ,isouter=True)\
+        .group_by(Category.id).all()
 
+def stats_revenue(kw=None, from_date=None, to_date=None):
+    query = db.session.query(Product.id, Product.name, func.sum(ReceiptDetails.quantity*ReceiptDetails.price))\
+                      .join(ReceiptDetails, ReceiptDetails.product_id.__eq__(Product.id))\
+                      .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
+
+    if kw:
+        query = query.filter(Product.name.contains(kw))
+
+    if from_date:
+        query = query.filter(Receipt.created_date.__ge__(from_date))
+
+    if to_date:
+        query = query.filter(Receipt.created_date.__le__(to_date))
+
+    return query.group_by(Product.id).order_by(-Product.id).all()
+
+if __name__ == "__main__" :
+    from app import app
+    with app.app_context():
+        print(count_product_by_cate())
 
 
 

@@ -5,6 +5,45 @@
 {% if current_user.is_authenticated%}
 <h1 class="text-center text-success">TRANG CHỦ QUẢN TRỊ BÁN HÀNG</h1>
 <h3>CHÀO <span class="text-danger">{{ current_user.name }}</span>!!!</h3>
+<div class="row">
+    <div class="col-md-5 col-sm-12">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Tên danh mục</th>
+                <th>Số sản phẩm</th>
+            </tr>
+            {%for s in stats %}
+            <tr>
+<!--                Do nó là tuple nên không s.id được-->
+                <td>{{s[0]}}</td>
+                <td>{{s[1]}}</td>
+                <td>{{s[2]}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+    </div>
+<!--    Về đồ thị -->
+    <div class="col-md-7 col-sm-12">
+        <canvas id="cateStats"></canvas>
+    </div>
+</div>
+<!--Để đây để khi đăng nhập mới được vẽ-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{url_for('static', filename='js/my-chart.js')}}"></script>
+<!--Sự kiện khi cây DOM load -->
+<!--    Do nhãn là tên nên để dấu nháy-->
+<script>
+    let labels = []
+    let data = []
+    {%for s in stats %}
+    labels.push('{{ s[1] }}')
+    data.push({{ s[2] }})
+            {%endfor%}
+    window.onload = function(){
+    drawCateChart(labels , data)
+    }
+</script>
 {% else %}
 <form method="post" action="/login-admin">
     <div class="mb-3 mt-3">
